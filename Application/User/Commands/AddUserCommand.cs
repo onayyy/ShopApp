@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Product.Commands.UserCommand
+namespace Application.User.Commands
 {
     public class AddUserCommand : IRequest<UserAggregate>
     {

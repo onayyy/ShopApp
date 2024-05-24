@@ -1,4 +1,4 @@
-﻿using Application.Product.Commands.ProductCommand;
+﻿using Application.Product.Commands;
 using Domain.Model;
 
 namespace ShopAPI.Models.ProductRequest

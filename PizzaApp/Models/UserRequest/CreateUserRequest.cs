@@ -1,5 +1,5 @@
 ﻿using Application.Product.Commands.ProductCommand;
-using Application.Product.Commands.UserCommand;
+using Application.User.Commands;
 using Domain.Model;
 
 namespace ShopAPI.Models.UserRequest

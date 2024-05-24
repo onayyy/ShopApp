@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Product.Commands.ProductCommand
+namespace Application.Product.Commands
 {
     public class AddProductCommand : IRequest<ProductAggregate>
     {
