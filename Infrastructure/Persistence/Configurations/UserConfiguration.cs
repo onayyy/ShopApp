@@ -17,7 +17,7 @@ namespace Infrastructure.Persistence.Configurations
             builder.HasKey(u => u.Id);
 
             builder.Property(x => x.Id).HasColumnName("id").HasColumnType("int");
-            builder.Property(u => u.UserName).HasColumnName("user_name").HasColumnType("varchar(250)");
+            builder.Property(u => u.Name).HasColumnName("name").HasColumnType("varchar(250)");
 
             builder.HasMany(u => u.Addresses)
                .WithOne(a => a.User)

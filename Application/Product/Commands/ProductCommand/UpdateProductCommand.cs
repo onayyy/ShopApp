@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Product.Commands
+namespace Application.Product.Commands.ProductCommand
 {
     public class UpdateProductCommand : IRequest<ProductAggregate>
     {
@@ -32,12 +32,10 @@ namespace Application.Product.Commands
 
         public class Handler : IRequestHandler<UpdateProductCommand, ProductAggregate>
         {
-            private IMediator _mediator;
             private IPizzaAppDbContext _dbContext;
 
-            public Handler(IMediator mediator, IPizzaAppDbContext dbContext)
+            public Handler(IPizzaAppDbContext dbContext)
             {
-                _mediator = mediator;
                 _dbContext = dbContext;
             }
 

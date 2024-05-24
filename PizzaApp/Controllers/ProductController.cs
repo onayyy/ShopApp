@@ -1,9 +1,9 @@
-﻿using Application.Product.Commands;
+﻿using Application.Product.Commands.ProductCommand;
 using Application.Product.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ShopAPI.Models;
+using ShopAPI.Models.ProductRequest;
 
 namespace ShopAPI.Controllers
 {

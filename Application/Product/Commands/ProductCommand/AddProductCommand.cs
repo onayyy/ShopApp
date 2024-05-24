@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Product.Commands
+namespace Application.Product.Commands.ProductCommand
 {
     public class AddProductCommand : IRequest<ProductAggregate>
     {
@@ -25,16 +25,14 @@ namespace Application.Product.Commands
             Quantity = quantity;
             Ingredients = ingredients;
         }
-  
+
         public class Handler : IRequestHandler<AddProductCommand, ProductAggregate>
         {
-            private IMediator _mediator;
             private readonly IPizzaAppDbContext _dbContext;
 
-            public Handler(IPizzaAppDbContext dbContext, IMediator mediator)
+            public Handler(IPizzaAppDbContext dbContext)
             {
                 _dbContext = dbContext;
-                _mediator = mediator;
             }
 
             public async Task<ProductAggregate> Handle(AddProductCommand request, CancellationToken cancellationToken)

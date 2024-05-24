@@ -1,9 +1,9 @@
-﻿using Application.Product.Commands;
+﻿using Application.Product.Commands.ProductCommand;
 using Domain.Model;
 
-namespace ShopAPI.Models
+namespace ShopAPI.Models.ProductRequest
 {
-    public class CreateProductRequest
+    public class UpdateProductRequest
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -11,9 +11,9 @@ namespace ShopAPI.Models
         public List<Ingredients> Ingredients { get; set; }
         public double Quantity { get; set; }
 
-        public AddProductCommand ToCommand()
+        public UpdateProductCommand ToCommand(int id)
         {
-            return new AddProductCommand (Name, Description, Price, Ingredients, Quantity);
+            return new UpdateProductCommand(id, Name, Description, Price, Ingredients, Quantity);
         }
     }
 }

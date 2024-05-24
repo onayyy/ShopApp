@@ -14,8 +14,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(PizzaAppDbContext))]
-    [Migration("20240524020950_mig1")]
-    partial class mig1
+    [Migration("20240524110449_mig7")]
+    partial class mig7
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -157,7 +157,7 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .HasColumnName("user_name");
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
