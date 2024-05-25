@@ -19,5 +19,30 @@ namespace Domain.Model
         public virtual List<ProductAggregate> Products { get; set; }
         public UserAggregate User { get; set; }
         public AddressAggregate Address { get; set; }
+
+
+        public OrderAggregate()
+        {
+            //only db
+        }
+
+        public OrderAggregate(string orderNumber, double totalAmount, double discountAmount, string customerName, List<ProductAggregate> products, UserAggregate user, AddressAggregate address)
+        {
+            UserId = user.Id;
+            AddressId = address.Id;
+            OrderNumber = orderNumber;
+            TotalAmount = totalAmount;
+            DiscountAmount = discountAmount;
+            OrderDate = DateTime.Now;
+            CustomerName = customerName;
+            Products = products;
+            User = user;
+            Address = address;
+        }
+
+        public static OrderAggregate Create(string orderNumber, double totalAmount, double discountAmount, string customerName, List<ProductAggregate> products, UserAggregate user, AddressAggregate address)
+        {
+            return new OrderAggregate(orderNumber, totalAmount, discountAmount, customerName, products, user, address);
+        }
     }
 }

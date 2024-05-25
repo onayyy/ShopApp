@@ -1,4 +1,5 @@
-﻿using Application.Product.Commands.ProductCommand;
+﻿
+using Application.Product.Commands;
 using Application.Product.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
