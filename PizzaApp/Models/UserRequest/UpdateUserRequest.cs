@@ -1,23 +1,20 @@
 ﻿using Application.User.Commands;
-using Domain.Model;
 
 namespace ShopAPI.Models.UserRequest
 {
-    public class CreateUserRequest
+    public class UpdateUserRequest
     {
         public string Name { get; set; }
 
         public string Surname { get; set; }
 
-        public string Email { get; set; }
-
         public string Password { get; set; }
 
         public int Gender { get; set; }
 
-        public AddUserCommand ToCommand()
+        public UpdateUserCommand ToCommand(int id)
         {
-            return new AddUserCommand(Name, Surname, Email, Password, Gender);
+            return new UpdateUserCommand(id, Name, Surname, Password, Gender);
         }
     }
 }

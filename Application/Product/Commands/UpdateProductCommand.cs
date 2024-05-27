@@ -42,31 +42,17 @@ namespace Application.Product.Commands
             public async Task<ProductAggregate> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
             {
                 var product = await _dbContext.Products.FindAsync(request.Id, cancellationToken);
+
                 if (product == null)
-                {
                     throw new Exception($"Product with ID {request.Id} not found.");
-                }
 
-                if (request.Ingredients != null && request.Ingredients.Count > 0)
-                {
-                    var ingredients = request.Ingredients.Select(x => new Ingredients
-                    {
-                        Key = x.Key,
-                        Value = x.Value,
-                    }).ToList();
+                if (request.Ingredients == null)
+                    throw new Exception("INGREDIENTS_CANNOT_BE_EMPTY");
 
-                    product.Ingredients = ingredients;
-                }
+                if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Description))
+                    throw new Exception("NAME_OR_DESCRIPTION_CANNOT_BE_EMPTY");
 
-                if (!string.IsNullOrEmpty(request.Name) && !string.IsNullOrEmpty(request.Description))
-                {
-                    product.Name = request.Name;
-                    product.Description = request.Description;
-                }
-
-                product.Price = request.Price;
-                product.Quantity = request.Quantity;
-
+                product.Update(request.Name, request.Description, request.Price, request.Ingredients, request.Quantity);
                 _dbContext.Products.Update(product);
                 await _dbContext.SaveChangesAsync(cancellationToken);
                 return product;

@@ -13,10 +13,22 @@ namespace Application.User.Commands
     {
         public string Name { get; set; }
 
+        public string Surname { get; set; }
 
-        public AddUserCommand(string name)
+        public string Email { get; set; }
+
+        public string Password { get; set; }
+
+        public int Gender { get; set; }
+
+
+        public AddUserCommand(string name, string surname, string email, string password, int gender)
         {
             Name = name;
+            Surname = surname;
+            Email = email;
+            Password = password;
+            Gender = gender;
         }
 
         public class Handler : IRequestHandler<AddUserCommand, UserAggregate>
@@ -30,12 +42,17 @@ namespace Application.User.Commands
 
             public async Task<UserAggregate> Handle(AddUserCommand request, CancellationToken cancellationToken)
             {
-                if (string.IsNullOrEmpty(request.Name))
+                if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.Surname))
                 {
-                    throw new Exception("PRODUCT_NAME_CANNOT_BE_EMPTY");
+                    throw new Exception("USER_NAME_OR_SURNAME_CANNOT_BE_EMPTY");
                 }
 
-                var user = UserAggregate.Create(request.Name);
+                if (string.IsNullOrWhiteSpace(request.Email) && string.IsNullOrWhiteSpace(request.Password))
+                {
+                    throw new Exception("USER_EMAIL_OR_PASSWORD_CANNOT_BE_EMPTY");
+                }
+
+                var user = UserAggregate.Create(request.Name, request.Surname, request.Email, request.Password, request.Gender);
                 await _dbContext.Users.AddAsync(user, cancellationToken);
                 await _dbContext.SaveChangesAsync(cancellationToken);
 

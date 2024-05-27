@@ -8,17 +8,17 @@ namespace Domain.Model
 {
     public class OrderAggregate
     {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public int AddressId { get; set; }
-        public string OrderNumber { get; set; }
-        public double TotalAmount { get; set; }
-        public double DiscountAmount { get; set; }
-        public DateTime OrderDate { get; set; }
-        public string CustomerName { get; set; }
-        public virtual List<ProductAggregate> Products { get; set; }
-        public UserAggregate User { get; set; }
-        public AddressAggregate Address { get; set; }
+        public int Id { get; private set; }
+        public int UserId { get; private set; }
+        public int AddressId { get; private set; }
+        public string OrderNumber { get; private set; }
+        public double TotalAmount { get; private set; }
+        public double DiscountAmount { get; private set; }
+        public DateTime OrderDate { get; private set; }
+        public string CustomerName { get; private set; }
+        public virtual List<ProductAggregate> Products { get; private set; }
+        public UserAggregate User { get; private set; }
+        public AddressAggregate Address { get; private set; }
 
 
         public OrderAggregate()

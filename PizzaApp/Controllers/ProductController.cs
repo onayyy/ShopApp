@@ -28,7 +28,7 @@ namespace ShopAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProductWithById([FromRoute] int id)
+        public async Task<IActionResult> GetProductById([FromRoute] int id)
         {
             var query = new GetProductByIdQuery(id);
             var result = await _mediator.Send(query);

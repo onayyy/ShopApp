@@ -151,10 +151,29 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("email");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int")
+                        .HasColumnName("gender");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
                         .HasColumnName("name");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("password");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("surname");
 
                     b.HasKey("Id");
 

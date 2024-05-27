@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Application.Order.Commands
 {
@@ -64,9 +65,13 @@ namespace Application.Order.Commands
 
                 var products = await _dbContext.Products.Where(x => request.ProductIds.Contains(x.Id)).ToListAsync();
 
-                foreach ( var product in products )
+                foreach (var product in products )
                 {
-                    product.Quantity--;
+                    if (product.Quantity > 0)
+                        product.DeincrementQuantity();
+
+                    else
+                        throw new Exception($"Product {product.Id} is out of stock.")
                 }
 
                 var totalAmount = products.Sum(x => x.Price);

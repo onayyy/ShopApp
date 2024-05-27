@@ -1,5 +1,6 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using Application.User.Commands;
+using Application.User.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ShopAPI.Models.ProductRequest;
 using ShopAPI.Models.UserRequest;
@@ -17,11 +18,27 @@ namespace ShopAPI.Controllers
             _mediator = mediator;
         }
 
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [HttpPost("{register}")]
-        public async Task<IActionResult> Create([FromBody] CreateUserRequest request,[FromRoute] string register)
+        [HttpGet]
+        public async Task<IActionResult> GetUsers()
         {
-            var result = await _mediator.Send(request.ToCommand(register));
+            var query = new GetUserQuery();
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById([FromRoute] int id)
+        {
+            var query = new GetUserByIdQuery(id);
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [HttpPost("register")]
+        public async Task<IActionResult> Create([FromBody] CreateUserRequest request)
+        {
+            var result = await _mediator.Send(request.ToCommand());
             return Ok(result);
         }
 
@@ -30,6 +47,20 @@ namespace ShopAPI.Controllers
         {
             var result = await _mediator.Send(request.ToCommand(id));
             return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser([FromRoute] int id)
+        {
+            var result = await _mediator.Send(new DeleteUserCommand(id));
+            return Ok("Kullanıcı başarılıyla silindi.");
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request, [FromRoute] int id)
+        {
+            var result = await _mediator.Send(request.ToCommand(id));
+            return Ok("Kullanıcı Başarıyla Güncellendi.");
         }
     }
 }

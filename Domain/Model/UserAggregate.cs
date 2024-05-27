@@ -10,29 +10,49 @@ namespace Domain.Model
 {
     public class UserAggregate
     {
-        public int Id { get; set; }
+        public int Id { get; private set; }
 
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
-        public virtual List<AddressAggregate> Addresses { get; set; }
+        public string Surname { get; private set; }
+
+        public string Email { get; private set; }
+
+        public string Password { get; private set; }
+
+        public int Gender { get; private set; } // 1 erkek, 0 kadın
+
+        public virtual List<AddressAggregate> Addresses { get; private set; }
 
         [JsonIgnore]
-        public virtual List<OrderAggregate> Orders { get; set; }
+        public virtual List<OrderAggregate> Orders { get; private set; }
 
         public UserAggregate()
         {
             // only db
         }
-        private UserAggregate(string name)
+
+        public UserAggregate(string name, string surname, string email, string password, int gender)
         {
             Name = name;
+            Surname = surname;
+            Email = email;
+            Password = password;
+            Gender = gender;
         }
 
-        public static UserAggregate Create(string name)
+        public static UserAggregate Create(string name, string surname, string email, string password, int gender)
         {
-            return new UserAggregate(name);
+            return new UserAggregate(name, surname, email, password, gender);
         }
 
+        public void Update(string name, string surname, string password, int gender)
+        {
+            Name = name;
+            Surname = surname;
+            Password = password;
+            Gender = gender;
+        }
   
     }
 }

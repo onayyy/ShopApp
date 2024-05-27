@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Product.Queries
 {
-    public class GetProductByIdQuery : IRequest<List<ProductAggregate>>
+    public class GetProductByIdQuery : IRequest<ProductAggregate>
     {
         public int ProductId { get; set; }
 
@@ -19,7 +19,7 @@ namespace Application.Product.Queries
             ProductId = productId;
         }
 
-        public class Handler : IRequestHandler<GetProductByIdQuery, List<ProductAggregate>>
+        public class Handler : IRequestHandler<GetProductByIdQuery, ProductAggregate>
         {
             private readonly IPizzaAppDbContext _pizzaAppDbContext;
 
@@ -28,7 +28,7 @@ namespace Application.Product.Queries
                 _pizzaAppDbContext = pizzaAppDbContext;
             }
 
-            public async Task<List<ProductAggregate>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
+            public async Task<ProductAggregate> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
             {
                 var dbQuery = _pizzaAppDbContext.Products.AsQueryable();
 
@@ -37,9 +37,14 @@ namespace Application.Product.Queries
                     dbQuery = dbQuery.Where(x => x.Id == request.ProductId);
                 }
 
-                var products = await dbQuery.Include(x => x.Orders).ToListAsync(cancellationToken);
+                var product = await dbQuery.Include(x => x.Orders).FirstOrDefaultAsync(cancellationToken);
 
-                return products;
+                if (product is null)
+                {
+                    throw new Exception("Product not found");
+                }
+
+                return product;
             }
         }
     }
