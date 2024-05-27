@@ -71,7 +71,7 @@ namespace Application.Order.Commands
                         product.DeincrementQuantity();
 
                     else
-                        throw new Exception($"Product {product.Id} is out of stock.")
+                        throw new Exception($"Product {product.Id} is out of stock.");
                 }
 
                 var totalAmount = products.Sum(x => x.Price);
