@@ -20,7 +20,7 @@ namespace Domain.Model
 
         public string Password { get; private set; }
 
-        public int Gender { get; private set; } // 1 erkek, 0 kadın
+        public int Gender { get; private set; } // 1 erkek, 0 kadın , 2 Belirtmek istemiyorum
 
         public virtual List<AddressAggregate> Addresses { get; private set; }
 

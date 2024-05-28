@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Application.User.Commands
 {
     public class AddUserCommand : IRequest<UserAggregate>
@@ -34,25 +35,26 @@ namespace Application.User.Commands
         public class Handler : IRequestHandler<AddUserCommand, UserAggregate>
         {
             private readonly IPizzaAppDbContext _dbContext;
+            private readonly IPasswordHasherService _passwordHasherService;
 
-            public Handler(IPizzaAppDbContext dbContext)
+            public Handler(IPizzaAppDbContext dbContext, IPasswordHasherService passwordHasherService)
             {
                 _dbContext = dbContext;
+                _passwordHasherService = passwordHasherService;
             }
 
             public async Task<UserAggregate> Handle(AddUserCommand request, CancellationToken cancellationToken)
             {
                 if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.Surname))
-                {
                     throw new Exception("USER_NAME_OR_SURNAME_CANNOT_BE_EMPTY");
-                }
+
 
                 if (string.IsNullOrWhiteSpace(request.Email) && string.IsNullOrWhiteSpace(request.Password))
-                {
                     throw new Exception("USER_EMAIL_OR_PASSWORD_CANNOT_BE_EMPTY");
-                }
 
-                var user = UserAggregate.Create(request.Name, request.Surname, request.Email, request.Password, request.Gender);
+                var hashedPassword = _passwordHasherService.HashPassword(request.Password);
+
+                var user = UserAggregate.Create(request.Name, request.Surname, request.Email, hashedPassword, request.Gender);
                 await _dbContext.Users.AddAsync(user, cancellationToken);
                 await _dbContext.SaveChangesAsync(cancellationToken);
 

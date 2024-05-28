@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Interfaces.RedisCache;
 using Domain.Model;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,8 +11,12 @@ using System.Threading.Tasks;
 
 namespace Application.Product.Queries
 {
-    public class GetProductQuery : IRequest<List<ProductAggregate>>
+    public class GetProductQuery : IRequest<List<ProductAggregate>>, ICacheableQuery
     {
+        public string CacheKey => "GetProduct";
+
+        public double CacheTime => 10;
+
         public class Handler : IRequestHandler<GetProductQuery, List<ProductAggregate>>
         {
             private readonly IPizzaAppDbContext _pizzaAppDbContext;

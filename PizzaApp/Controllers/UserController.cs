@@ -1,4 +1,5 @@
-﻿using Application.User.Commands;
+﻿using Application.Common.Interfaces.Tokens;
+using Application.User.Commands;
 using Application.User.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,12 @@ namespace ShopAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ITokenService _tokenService;
 
-        public UserController(IMediator mediator)
+        public UserController(IMediator mediator, ITokenService tokenService)
         {
             _mediator = mediator;
+            _tokenService = tokenService;
         }
 
         [HttpGet]
