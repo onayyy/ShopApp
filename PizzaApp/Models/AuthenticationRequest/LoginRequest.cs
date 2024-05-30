@@ -1,4 +1,5 @@
 ﻿using Application.Authentication.Commands;
+using Application.DTOs;
 
 namespace ShopAPI.Models.AuthenticationRequest
 {

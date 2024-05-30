@@ -1,4 +1,6 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Behaviors;
+using Application.Common.Interfaces;
+using Application.Common.Interfaces.RedisCache;
 using Domain.Model;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +29,6 @@ namespace Application.Authentication.Commands
         {
             private readonly IPizzaAppDbContext _dbContext;
             private readonly IPasswordHasherService _passwordHasherService;
- 
 
             public Handler(IPizzaAppDbContext dbContext, IPasswordHasherService passwordHasherService)
             {

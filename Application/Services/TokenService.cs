@@ -1,6 +1,7 @@
 ﻿using Application.Authentication.Commands;
 using Application.Common.Interfaces.RedisCache;
 using Application.Common.Interfaces.Tokens;
+using Application.DTOs;
 using Domain.Model;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -18,11 +19,14 @@ namespace Infrastructure.Tokens
     public class TokenService : ITokenService
     {
         private readonly TokenSettings _tokenSettings;
+        private readonly IRedisCacheService _redisCacheService;
         
-        public TokenService(IOptions<TokenSettings> options)
+        public TokenService(IOptions<TokenSettings> options, IRedisCacheService redisCacheService)
         {
             _tokenSettings = options.Value;
+            _redisCacheService = redisCacheService;
         }
+
 
         public string CreateToken(UserAggregate userLogin)
         {
@@ -46,7 +50,16 @@ namespace Infrastructure.Tokens
 
             userLogin*/
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var tokenHandler = new JwtSecurityTokenHandler().WriteToken(token);
+
+            var cacheKey = $"Token_{userLogin.Id}";
+            var cacheExpiry = TimeSpan.FromMinutes(5);
+
+
+            _redisCacheService.SetAsync(cacheKey, tokenHandler, DateTime.Now.Add(cacheExpiry));
+            //_redisCacheService.SetAsync()
+
+            return tokenHandler;
           
         }
 

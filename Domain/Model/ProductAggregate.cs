@@ -9,15 +9,15 @@ namespace Domain.Model
 {
     public class ProductAggregate
     {
-        public int Id { get; private set; }
-        public string Name { get; private set; }
-        public string Description { get; private set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
         public double Price { get; private set; }
-        public DateTime CreatedDate { get; private set; }
-        public List<Ingredients> Ingredients { get; private set; }
-        public double Quantity { get; private set; }
+        public DateTime CreatedDate { get; set; }
+        public List<Ingredients> Ingredients { get; set; }
+        public double Quantity { get; set; }
         [JsonIgnore]
-        public virtual List<OrderAggregate> Orders { get; private set; }
+        public virtual List<OrderAggregate> Orders { get; set; }
 
         public ProductAggregate()
         {

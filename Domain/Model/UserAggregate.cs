@@ -10,17 +10,17 @@ namespace Domain.Model
 {
     public class UserAggregate
     {
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
-        public string Surname { get; private set; }
+        public string Surname { get; set; }
 
-        public string Email { get; private set; }
+        public string Email { get; set; }
 
-        public string Password { get; private set; }
+        public string Password { get; set; }
 
-        public int Gender { get; private set; } // 1 erkek, 0 kadın , 2 Belirtmek istemiyorum
+        public int Gender { get; set; } // 1 erkek, 0 kadın , 2 Belirtmek istemiyorum
 
         public virtual List<AddressAggregate> Addresses { get; private set; }
 

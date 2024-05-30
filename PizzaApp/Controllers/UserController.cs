@@ -2,6 +2,7 @@
 using Application.User.Commands;
 using Application.User.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShopAPI.Models.ProductRequest;
 using ShopAPI.Models.UserRequest;
@@ -10,6 +11,7 @@ namespace ShopAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;

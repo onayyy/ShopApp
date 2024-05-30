@@ -11,7 +11,7 @@ namespace ShopAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class OrderController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -51,6 +51,14 @@ namespace ShopAPI.Controllers
             var result = await _mediator.Send(new DeleteOrderCommand(id));
             return Ok("Sipariş Başarıyla Silindi");
         }
+
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> UpdateOrderStatus([FromBody] UpdateOrderStatusRequest request, [FromRoute] int id)
+        {
+            var result = await _mediator.Send(request.ToCommand(id));
+            return Ok("Sipariş Durumu Başarıyla Güncellendi");
+        }
+
     }
 }
 
