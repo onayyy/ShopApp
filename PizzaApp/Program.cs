@@ -6,9 +6,11 @@ using Application.Mail.Interfaces;
 using Application.Order.Commands;
 using Application.Services;
 using Infrastructure;
+using Infrastructure.MassTransit.Consumers;
 using Infrastructure.RedisCache;
 using Infrastructure.Repositories.MailProviders;
 using Infrastructure.Tokens;
+using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +22,6 @@ using System.Configuration;
 using System.Text;
 using System.Text.Json.Serialization;
 using static Domain.Model.OrderAggregate;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -101,6 +102,26 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.InstanceName = builder.Configuration["RedisCacheSettings:InstanceName"];
 });
 
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<OrderCreatedWhenDeincrementQuantityConsumer>();
+    x.AddConsumer<OrderUpdatedWhenSendMailConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("rabbitmq://localhost", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+
+        cfg.ReceiveEndpoint("shopApp.order.created", e => { e.Consumer<OrderCreatedWhenDeincrementQuantityConsumer>(context); e.Bind("shopApp.product.stock", x => { x.ExchangeType = "fanout"; }); });
+        cfg.ReceiveEndpoint("shopApp.order.updated", t => { t.Consumer<OrderUpdatedWhenSendMailConsumer>(context); t.Bind("shopApp.natification.sendMail", y => { y.ExchangeType = "fanout"; }); });
+    });
+});
+
+builder.Services.AddMassTransitHostedService();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();

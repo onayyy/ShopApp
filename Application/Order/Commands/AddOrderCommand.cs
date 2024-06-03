@@ -1,5 +1,8 @@
 ﻿using Application.Common.Interfaces;
+using Domain.Events.Order;
 using Domain.Model;
+using MassTransit;
+using MassTransit.Transports;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -29,10 +32,12 @@ namespace Application.Order.Commands
         public class Handler : IRequestHandler<AddOrderCommand, OrderAggregate>
         {
             private readonly IPizzaAppDbContext _dbContext;
+            private readonly ISendEndpointProvider _sendEndpointProvider;
 
-            public Handler(IPizzaAppDbContext dbContext)
+            public Handler(IPizzaAppDbContext dbContext, ISendEndpointProvider sendEndpointProvider)
             {
                 _dbContext = dbContext;
+                _sendEndpointProvider = sendEndpointProvider;
             }
 
             public async Task<OrderAggregate> Handle(AddOrderCommand request, CancellationToken cancellationToken)
@@ -65,14 +70,18 @@ namespace Application.Order.Commands
 
                 var products = await _dbContext.Products.Where(x => request.ProductIds.Contains(x.Id)).ToListAsync();
 
-                foreach (var product in products )
+         
+
+                /*foreach (var product in products )
                 {
                     if (product.Quantity > 0)
                         product.DeincrementQuantity();
 
                     else
                         throw new Exception($"Product {product.Id} is out of stock.");
-                }
+                }*/
+
+         
 
                 var totalAmount = products.Sum(x => x.Price);
 
@@ -82,6 +91,12 @@ namespace Application.Order.Commands
 
                 await _dbContext.Orders.AddAsync(order, cancellationToken);
                 await _dbContext.SaveChangesAsync(cancellationToken);
+
+                var orderEvent = new OrderCreatedEvent();
+                orderEvent.ProductIds = request.ProductIds;
+
+                var endpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri("exchange:shopApp.order.created"));
+                await endpoint.Send(orderEvent, cancellationToken);
 
                 return order;
             }

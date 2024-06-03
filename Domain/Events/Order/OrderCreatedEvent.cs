@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs
+namespace Domain.Events.Order
 {
-    public class UserDto
+    public class OrderCreatedEvent
     {
-        public int Id { get; set; }
+        public List<int> ProductIds { get; set; } = new List<int>();
 
-        public string Email { get; set; }
+
     }
 }
